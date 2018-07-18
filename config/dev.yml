@@ -1,0 +1,6 @@
+env:
+  POSTGRES_PASSWORD_KEY: ''
+  POSTGRES_HOST: localhost
+  POSTGRES_PORT: '5432'
+  POSTGRES_DATABASE: social
+  POSTGRES_USERNAME: viseoromeo
