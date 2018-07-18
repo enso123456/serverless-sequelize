@@ -53,29 +53,17 @@ module.exports.hello = async (event, context, callback) => {
       });
     });
 
-    // const customer = await Customer.create({
-    //   bp_number: '1',
-    //   english_name: 'test',
-    //   accountId: 1
-    // }, {
-    //   include: [CustomerAccount]
-    // });
-
     const response = {
       statusCode: 200,
       body: JSON.stringify({
         message: 'Created a account!',
       }),
     };
-    // console.log(customer);
     callback(null, response);
   } catch (e) {
-    console.log(e);
     callback(null, e);
   }
 };
-
-
 
 module.exports.getCustomerById = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -97,10 +85,8 @@ module.exports.getCustomerById = async (event, context, callback) => {
         customer
       }),
     };
-    // console.log(customer);
     callback(null, response);
   } catch (e) {
-    console.log(e);
     callback(null, e);
   }
 }
