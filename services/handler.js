@@ -26,15 +26,16 @@ module.exports.hello = async (event, context, callback) => {
 
     accountsData = accountsData.map(async (val) => {
       const [id, deletion_indicator, business_partner_no, account_class] = val;
-      return await Account.create({
-        deletion_indicator,
-        business_partner_no,
-        account_class,
-      });
+      const accountExist = await Account.count({ where: { 'id': id } });
+      if (accountExist <= 0) {
+        return await Account.create({
+          deletion_indicator,
+          business_partner_no,
+          account_class,
+        });
+      }
     });
 
-    const CustomerAccount = Customer.belongsTo(Account);
-    // Customer
     let customers = await readFile('./customer_info.csv')
     let customersData = customers.split('\n').map(val => val.split(','))
     customersData.shift();
@@ -42,15 +43,16 @@ module.exports.hello = async (event, context, callback) => {
 
     customersData.map(async val => {
       const [customer_id, bp_number, english_name] = val;
-      const account = await Account.findById(1);
-      const { id } = account 
-      return await Customer.create({ 
-        bp_number, 
-        english_name,
-        accountId: id
-      }, {
-        include: [CustomerAccount]
-      });
+      console.log([customer_id, bp_number, english_name])
+      const customerExist = await Customer.count({ where: { 'id': customer_id } });
+      if (customerExist <= 0) {
+        return await Customer.create({
+          customer_id,
+          bp_number,
+          english_name,
+          account_id: '1'
+        });
+      }
     });
 
     const response = {
@@ -79,6 +81,7 @@ module.exports.getCustomerById = async (event, context, callback) => {
       }]
     });
 
+    console.log(await Customer.count({ where: { 'id': 1 }}));
     const response = {
       statusCode: 200,
       body: JSON.stringify({
